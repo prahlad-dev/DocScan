@@ -26,7 +26,7 @@ import kotlin.math.abs
 /**
  * This class previews the live images from the camera
  */
-class ScanSurfaceView(context: Context, iScanner: IScanner, val TIME_HOLD_STILL: Long = DEFAULT_TIME_POST_PICTURE) : FrameLayout(context), SurfaceHolder.Callback,AutoCapture,autoCapture {
+class ScanSurfaceView(context: Context, iScanner: IScanner, val TIME_HOLD_STILL: Long = DEFAULT_TIME_POST_PICTURE) : FrameLayout(context), SurfaceHolder.Callback{
 
     private var surfaceView: SurfaceView = SurfaceView(context)
     private val scanCanvasView: ScanCanvasView
@@ -221,10 +221,10 @@ class ScanSurfaceView(context: Context, iScanner: IScanner, val TIME_HOLD_STILL:
             } else {
                 Timber.i("GREEN (resultWidth/resultHeight) > 4=${resultWidth / resultHeight} points[0].x == 0 && points[3].x == 0=${points[0].x}:${points[3].x} points[2].x == previewHeight && points[1].x == previewHeight=${points[2].x}:${points[1].x} previewHeight=$previewHeight")
                 scanHint = ScanHint.CAPTURING_IMAGE
-                clearAndInvalidateCanvas()
-                if (!isAutoCaptureScheduled) {
-                    scheduleAutoCapture(scanHint)
-                }
+//                clearAndInvalidateCanvas()
+//                if (!isAutoCaptureScheduled) {
+//                    scheduleAutoCapture(scanHint)
+//                }
             }
         }
         Timber.i("label=$scanHint preview Area 95%=${0.95 * previewArea} Preview Area 20%=${0.20 * previewArea} Area=$area")
@@ -381,12 +381,5 @@ class ScanSurfaceView(context: Context, iScanner: IScanner, val TIME_HOLD_STILL:
     companion object {
         private const val TIME_POST_PICTURE = 1900L
         const val DEFAULT_TIME_POST_PICTURE = 2000L
-    }
-    override fun autocapture(){
-
-    }
-
-    override fun acapture() {
-        
     }
 }
