@@ -8,4 +8,7 @@ import android.graphics.Bitmap
 interface IScanner {
     fun displayHint(scanHint: ScanHint)
     fun onPictureClicked(bitmap: Bitmap)
+    companion object{
+
+    }
 }

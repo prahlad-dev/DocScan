@@ -387,6 +387,6 @@ class ScanSurfaceView(context: Context, iScanner: IScanner, val TIME_HOLD_STILL:
     }
 
     override fun acapture() {
-
+        
     }
 }

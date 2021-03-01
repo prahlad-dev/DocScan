@@ -35,6 +35,7 @@ import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.abs
+import info.hannes.liveedgedetection.view.*
 
 
 /**
@@ -59,14 +60,11 @@ class ScanActivity : AppCompatActivity(), IScanner, View.OnClickListener{
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         capture = findViewById(R.id.btnCapture)
 
-//        capture.setOnClickListener(object : View.OnClickListener {
-//            override fun onClick(view: View?) {
-//                // Do some work here
-//                var a = ScanSurfaceView(context,IScanner)
-//                a.autoCapture
-//            }
-//
-//        })
+        capture.setOnClickListener {
+            //using imageSurfaceView because it is an instance of the class ScanSurfaceView
+            imageSurfaceView?.autoCapture(ScanHint.CAPTURING_IMAGE)
+            capture.visibility = View.GONE
+        }
 
         crop_accept_btn.setOnClickListener(this)
         crop_reject_btn.setOnClickListener {
