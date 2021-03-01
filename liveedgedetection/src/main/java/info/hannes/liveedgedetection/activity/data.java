@@ -39,8 +39,9 @@ public class data extends AppCompatActivity {
     Button done;
     Double nima_score;
 
-    String filename, block_conf, sym_conf, request_id, vertical_id, vehicle_id,make_id, model_id, variant_id, fuel_id,
-    cc_id, prev_insurer,mfg_yr,registration_date,expiry_date;
+    String filename, block_conf, sym_conf, request_id, vertical_id,make_id, model_id, variant_id, fuel_id, prev_insurer,registration_date,expiry_date;
+
+    String vehicle_id,cc_id,mfg_yr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,7 +123,7 @@ public class data extends AppCompatActivity {
 
     public void connectToServer(Bitmap image){
 
-        String postUrl= "http://192.180.1.86:7000/api/qis/android_generate_quote/";
+        String postUrl= "http://192.180.1.27:7000/api/qis/android_generate_quote/";
         MultipartBody.Builder multipartBodyBuilder = new MultipartBody.Builder().setType(MultipartBody.FORM);
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         image.compress(Bitmap.CompressFormat.JPEG,100,byteArrayOutputStream);
@@ -167,16 +168,17 @@ public class data extends AppCompatActivity {
                             sym_conf = (String) obj.get("sym_conf");
                             request_id = (String) obj.get("request_id");
                             vertical_id = (String) obj.get("vertical");
-                            vehicle_id = (String) obj.get("vehicle");
+                            vehicle_id = String.valueOf((Integer) obj.get("vehicle_id"));
                             make_id = (String) obj.get("make");
                             model_id = (String) obj.get("model");
                             variant_id = (String) obj.get("variant");
                             fuel_id = (String) obj.get("fuel");
-                            cc_id = (String) obj.get("cc");
+                            cc_id = String.valueOf((Integer) obj.get("cc"));
                             prev_insurer = (String) obj.get("prev_insurer");
-                            mfg_yr = (String) obj.get("mfg_yr");
+                            mfg_yr = String.valueOf((Integer) obj.get("mfg_yr"));
                             registration_date = (String) obj.get("registration_date");
                             expiry_date = (String) obj.get("expiry_date");
+                            Log.d("mainAPI", "vehicleid: "+vehicle_id);
 
                             if(nima_score>4.0){
 //                                sendToMainApi();

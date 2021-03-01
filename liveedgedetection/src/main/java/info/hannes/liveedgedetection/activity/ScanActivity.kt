@@ -40,7 +40,7 @@ import kotlin.math.abs
 /**
  * This class initiates camera and detects edges on live view
  */
-class ScanActivity : AppCompatActivity(), IScanner, View.OnClickListener {
+class ScanActivity : AppCompatActivity(), IScanner, View.OnClickListener{
     lateinit var croppedBitmap: Bitmap
     private var imageSurfaceView: ScanSurfaceView? = null
     private var isCameraPermissionGranted = true
@@ -59,12 +59,14 @@ class ScanActivity : AppCompatActivity(), IScanner, View.OnClickListener {
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         capture = findViewById(R.id.btnCapture)
 
-        capture.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(view: View?) {
-                // Do some work here
-            }
-
-        })
+//        capture.setOnClickListener(object : View.OnClickListener {
+//            override fun onClick(view: View?) {
+//                // Do some work here
+//                var a = ScanSurfaceView(context,IScanner)
+//                a.autoCapture
+//            }
+//
+//        })
 
         crop_accept_btn.setOnClickListener(this)
         crop_reject_btn.setOnClickListener {

@@ -26,7 +26,7 @@ import kotlin.math.abs
 /**
  * This class previews the live images from the camera
  */
-class ScanSurfaceView(context: Context, iScanner: IScanner, val TIME_HOLD_STILL: Long = DEFAULT_TIME_POST_PICTURE) : FrameLayout(context), SurfaceHolder.Callback,AutoCapture {
+class ScanSurfaceView(context: Context, iScanner: IScanner, val TIME_HOLD_STILL: Long = DEFAULT_TIME_POST_PICTURE) : FrameLayout(context), SurfaceHolder.Callback,AutoCapture,autoCapture {
 
     private var surfaceView: SurfaceView = SurfaceView(context)
     private val scanCanvasView: ScanCanvasView
@@ -383,6 +383,10 @@ class ScanSurfaceView(context: Context, iScanner: IScanner, val TIME_HOLD_STILL:
         const val DEFAULT_TIME_POST_PICTURE = 2000L
     }
     override fun autocapture(){
+
+    }
+
+    override fun acapture() {
 
     }
 }
