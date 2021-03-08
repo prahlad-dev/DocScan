@@ -1,8 +1,8 @@
 [![Release](https://jitpack.io/v/hannesa2/LiveEdgeDetection.svg)](https://jitpack.io/#hannesa2/LiveEdgeDetection)
 
-# LiveEdgeDetection
+# TurtleScanner
 
-LiveEdgeDetection is an Android document detection library built on top of OpenCV. It scans documents from camera live mode and allows you to adjust crop using the detected 4 edges and performs perspective transformation of the cropped image.
+TurtleScanner is a Document Scanner android application built on top of OpenCV. It scans documents from camera, guides the user to live mode and allows you to adjust crop using the detected 4 edges and performs perspective transformation of the cropped image.
 
 **It works best with a dark background.**
 
@@ -17,13 +17,13 @@ https://github.com/jitpack/jitpack.io/issues/4119
 ![Use darker bg](https://github.com/hannesa2/LiveEdgeDetection/blob/master/use_darker_bg.png)
 ![Move closer](https://github.com/hannesa2/LiveEdgeDetection/blob/master/move_closer.png)
 ![Move away](https://github.com/hannesa2/LiveEdgeDetection/blob/master/move_away.png)
-![Adjust angle](https://github.com/hannesa2/LiveEdgeDetection/blob/master/adjust_angle.png)
+![Adjust angle less than 25 degree](https://github.com/hannesa2/LiveEdgeDetection/blob/master/adjust_angle.png)
 ![Hold still](https://github.com/hannesa2/LiveEdgeDetection/blob/master/hold_still.png)
 ![Adjust crop](https://github.com/hannesa2/LiveEdgeDetection/blob/master/adjust_crop.png)
 ![Result](https://github.com/hannesa2/LiveEdgeDetection/blob/master/cropped.png)
 
-# Integrating into your project
-This library is available in [JitPack.io](https://jitpack.io/#hannesa2/LiveEdgeDetection/) repository.
+# Dynamic Edge Detection Library
+The edge detection library is available in [JitPack.io](https://jitpack.io/#hannesa2/LiveEdgeDetection/) repository.
 To use it, make sure to add the below inside root build.gradle file
 
 ```
