@@ -5,7 +5,7 @@
     <string name="finding_rect">Use darker background</string>
     <string name="move_away">Move away</string>
     <string name="move_closer">Move closer</string>
-    <string name="adjust_angle">Adjust angle</string>
+    <string name="adjust_angle">Adjust angle less than 25 degrees</string>
     <string name="hold_still">Hold still</string>
     <string name="capturing">Capturing image</string>
 </resources>
