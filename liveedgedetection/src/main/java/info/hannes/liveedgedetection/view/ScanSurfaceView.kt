@@ -80,9 +80,6 @@ class ScanSurfaceView(context: Context, iScanner: IScanner, val TIME_HOLD_STILL:
             }
             camera = open(defaultCameraId)
             val cameraParams = camera?.getParameters()
-//            if (cameraParams != null) {
-//                cameraParams.focusMode = Parameters.FOCUS_MODE_CONTINUOUS_PICTURE
-//            }
             val flashModes = cameraParams?.supportedFlashModes
             if (null != flashModes && flashModes.contains(Parameters.FLASH_MODE_AUTO)) {
                 cameraParams.flashMode = Parameters.FLASH_MODE_AUTO
@@ -320,6 +317,7 @@ class ScanSurfaceView(context: Context, iScanner: IScanner, val TIME_HOLD_STILL:
         iScanner.onPictureClicked(bitmap)
         postDelayed({ isCapturing = false }, TIME_POST_PICTURE)
     }
+
     private val mShutterCallBack = ShutterCallback {
         val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
         audioManager.playSoundEffect(AudioManager.FLAG_PLAY_SOUND)

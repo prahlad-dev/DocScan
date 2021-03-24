@@ -1,6 +1,7 @@
 package info.hannes.liveedgedetection.activity;
 
 
+import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -34,15 +35,12 @@ import okhttp3.Response;
 
 public class data extends AppCompatActivity {
 
-    TextView nima, fname, blockconf, symconf, reqid, vertical, vehicleid, make, model, variant, fuel, cc, previnsu, mfgyear, regdate, expdate,wait;
+    TextView fname, blockconf, symconf, reqid, vertical, vehicleid, make, model, variant, fuel, cc, previnsu, mfgyear, regdate, expdate,wait;
     String resStr, imagename;
     Button done;
-    Double nima_score;
-
     String filename, block_conf, sym_conf, request_id, vertical_id,make_id, model_id, variant_id, fuel_id, prev_insurer,registration_date,expiry_date;
-
     String vehicle_id,cc_id,mfg_yr;
-
+    ProgressDialog progressDoalog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,8 +69,6 @@ public class data extends AppCompatActivity {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         new MyAsyncTask().execute();
-
-
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,9 +87,11 @@ public class data extends AppCompatActivity {
             }catch (Exception e){
                 Toast.makeText(data.this, "Error occured in fetching data", Toast.LENGTH_SHORT).show();
             }
+
             // Waiting for results to be fetched.
             try {
-                TimeUnit.SECONDS.sleep(15);
+
+                TimeUnit.SECONDS.sleep(10);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -122,8 +120,7 @@ public class data extends AppCompatActivity {
     }
 
     public void connectToServer(Bitmap image){
-
-        String postUrl= "http://192.180.1.27:7000/api/qis/android_generate_quote/";
+        String postUrl= "http://192.180.1.169:7000/api/qis/android_generate_quote/";
         MultipartBody.Builder multipartBodyBuilder = new MultipartBody.Builder().setType(MultipartBody.FORM);
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         image.compress(Bitmap.CompressFormat.JPEG,100,byteArrayOutputStream);
@@ -178,19 +175,7 @@ public class data extends AppCompatActivity {
                             mfg_yr = String.valueOf((Integer) obj.get("mfg_yr"));
                             registration_date = (String) obj.get("registration_date");
                             expiry_date = (String) obj.get("expiry_date");
-                            Log.d("mainAPI", "vehicleid: "+vehicle_id);
-
-                            if(nima_score>4.0){
-//                                sendToMainApi();
-                            }else{
-                                Toast.makeText(data.this, "Capture Image Again.", Toast.LENGTH_SHORT).show();
-                            }
-
-                            byte[] encodedString = Base64.decode((String) obj.get("byte"), Base64.DEFAULT);
-
-                            //To get the uploaded image back here
-                            Bitmap decodedByte = BitmapFactory.decodeByteArray(encodedString, 0, encodedString.length);
-
+                            Log.d("mainAPI", "resStr: "+resStr);
                         } catch (Exception e) {
                             System.out.println("++++++INSIDE CATCH______");
                             e.printStackTrace();
@@ -200,41 +185,5 @@ public class data extends AppCompatActivity {
             }
         });
     }
-
-    public void sendToMainApi() throws IOException, JSONException {
-        JSONObject data = new JSONObject();
-        try{
-            data.put("fileid",imagename);
-            data.put("vertical","FW");
-            data.put("tag","previous_policy");
-            data.put("prev_claim",false);
-            data.put("regno","");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        OkHttpClient client = new OkHttpClient();
-        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-        RequestBody body = RequestBody.create(JSON, data.toString());
-        Request request = new Request.Builder()
-                .url("http://192.180.1.86:7000/api/qis/generate_quote/")
-                .post(body)
-                .build();
-
-        Response response = null;
-        response = client.newCall(request).execute();
-        resStr = response.body().string();
-
-        Log.d("mainAPI", "sendToMainApi: "+resStr);
-        new Handler().postDelayed(new Runnable() {
-
-            @Override
-            public void run() {
-                Toast.makeText(data.this,
-                        "Response:  "+resStr,
-                        Toast.LENGTH_LONG).show();
-            }
-        }, 4000);
-    }
-
 
 }

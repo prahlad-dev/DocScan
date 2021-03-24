@@ -22,7 +22,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         startScan()
     }
 
@@ -46,7 +45,6 @@ class MainActivity : AppCompatActivity() {
                         scanned_image.scaleType = ImageView.ScaleType.FIT_CENTER
 
                         showSnackbar(ScanConstants.IMAGE_PATH)
-                        Timber.i(filePath)
                     }
 
                 }

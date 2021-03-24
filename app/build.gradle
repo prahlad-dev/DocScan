@@ -21,15 +21,40 @@ android {
         exclude 'META-INF/ASL2.0'
         exclude("META-INF/*.kotlin_module")
     }
+    packagingOptions{
+        exclude 'AndroidManifest.xml'
+        exclude 'lib/arm64-v8a/libcardioDecider.so'
+        exclude 'lib/arm64-v8a/libcardioRecognizer.so'
+        exclude 'lib/arm64-v8a/libcardioRecognizer_tegra2.so'
+        exclude 'lib/arm64-v8a/libopencv_core.so'
+        exclude 'lib/arm64-v8a/libopencv_imgproc.so'
+        exclude 'lib/armeabi/libcardioDecider.so'
+        exclude 'lib/armeabi-v7a/libcardioDecider.so'
+        exclude 'lib/armeabi-v7a/libcardioRecognizer.so'
+        exclude 'lib/armeabi-v7a/libcardioRecognizer_tegra2.so'
+        exclude 'lib/armeabi-v7a/libopencv_core.so'
+        exclude 'lib/armeabi-v7a/libopencv_imgproc.so'
+        exclude 'lib/mips/libcardioDecider.so'
+        exclude 'lib/x86/libcardioDecider.so'
+        exclude 'lib/x86/libcardioRecognizer.so'
+        exclude 'lib/x86/libcardioRecognizer_tegra2.so'
+        exclude 'lib/x86/libopencv_core.so'
+        exclude 'lib/x86/libopencv_imgproc.so'
+        exclude 'lib/x86_64/libcardioDecider.so'
+        exclude 'lib/x86_64/libcardioRecognizer.so'
+        exclude 'lib/x86_64/libcardioRecognizer_tegra2.so'
+        exclude 'lib/x86_64/libopencv_core.so'
+        exclude 'lib/x86_64/libopencv_imgproc.so'
+    }
     defaultConfig {
         applicationId "info.hannes.liveedgedetection.demo"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode getGitCommitCount()
-        versionName getTag()
+//        versionCode getGitCommitCount()
+//        versionName getTag()
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField "String", 'GIT_USER', "\"" + getGitUser() + "\""
-        buildConfigField "String", 'GIT_REPOSITORY', "\"" + getGitRepository() + "\""
+//        buildConfigField "String", 'GIT_USER', "\"" + getGitUser() + "\""
+//        buildConfigField "String", 'GIT_REPOSITORY', "\"" + getGitRepository() + "\""
     }
 
     compileOptions {
@@ -37,43 +62,44 @@ android {
         sourceCompatibility 1.8
     }
 
-    signingConfigs {
-        def out = services.get(StyledTextOutputFactory).create("")
-        if (System.env.USER == "hannes") {
-            release {
-                def keystore = "${project.gradle.gradleUserHomeDir}/../.android/debug.keystore"
-                out.style(Style.Normal).text("I run with user hannes using ")
-                        .style(Style.SuccessHeader).println(keystore)
-                storePassword "android"
-                keyPassword "android"
-                keyAlias "androiddebugkey"
-                storeFile file(keystore)
-            }
-        } else if (System.getenv("TRAVIS")) {
-            release {
-                out.style(Style.Normal).text("I run on TRAVIS")
-                storeFile file('../signing/release.keystore')
-                storePassword System.getenv("KEYSTORE_PASS")
-                keyAlias System.getenv("ALIAS_NAME")
-                keyPassword System.getenv("ALIAS_PASS")
-            }
-        } else {
-            release {
-                out.style(Style.Normal).text("I run on Github actions")
-                storeFile file('../signing/release.keystore')
-                storePassword System.getenv("KEYSTORE_PASS")
-                keyAlias System.getenv("ALIAS_NAME")
-                keyPassword System.getenv("ALIAS_PASS")
-            }
-        }
-    }
+//    signingConfigs {
+//        def out = services.get(StyledTextOutputFactory).create("")
+//        if (System.env.USER == "hannes") {
+//            release {
+//                def keystore = "${project.gradle.gradleUserHomeDir}/../.android/debug.keystore"
+//                out.style(Style.Normal).text("I run with user hannes using ")
+//                        .style(Style.SuccessHeader).println(keystore)
+//                storePassword "android"
+//                keyPassword "android"
+//                keyAlias "androiddebugkey"
+//                storeFile file(keystore)
+//            }
+//        } else if (System.getenv("TRAVIS")) {
+//            release {
+//                out.style(Style.Normal).text("I run on TRAVIS")
+//                storeFile file('../signing/release.keystore')
+//                storePassword System.getenv("KEYSTORE_PASS")
+//                keyAlias System.getenv("ALIAS_NAME")
+//                keyPassword System.getenv("ALIAS_PASS")
+//            }
+//        } else {
+//            release {
+//                out.style(Style.Normal).text("I run on Github actions")
+//                storeFile file('../signing/release.keystore')
+//                storePassword System.getenv("KEYSTORE_PASS")
+//                keyAlias System.getenv("ALIAS_NAME")
+//                keyPassword System.getenv("ALIAS_PASS")
+//            }
+//        }
+//    }
 
     buildTypes {
 
         release {
-            signingConfig signingConfigs.release
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+//            signingConfig signingConfigs.release
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
 
         debug {
@@ -81,20 +107,20 @@ android {
         }
     }
 
-    applicationVariants.all { variant ->
-        variant.outputs.all { output ->
-            if (variant.name == "release") {
-                def builtType = variant.buildType.name
-                def vName = variant.versionName
-                def vCode = variant.versionCode
-                // def flavor = variant.flavorName
-                def newName = "LiveEdgeDetection"
-                newName += "-${vName}-${vCode}-${builtType}.apk"
-                outputFileName = newName
-            }
-            println "$variant.name: name is $outputFileName"
-        }
-    }
+//    applicationVariants.all { variant ->
+//        variant.outputs.all { output ->
+//            if (variant.name == "release") {
+//                def builtType = variant.buildType.name
+//                def vName = variant.versionName
+//                def vCode = variant.versionCode
+//                // def flavor = variant.flavorName
+//                def newName = "LiveEdgeDetection"
+//                newName += "-${vName}-${vCode}-${builtType}.apk"
+//                outputFileName = newName
+//            }
+//            println "$variant.name: name is $outputFileName"
+//        }
+//    }
 
 }
 
@@ -117,97 +143,97 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
-static def getGitOriginRemote() {
-    def process = "git remote -v".execute()
-    def values = process.text.toString().trim().split("\\r\\n|\\n|\\r")
+//static def getGitOriginRemote() {
+//    def process = "git remote -v".execute()
+//    def values = process.text.toString().trim().split("\\r\\n|\\n|\\r")
+//
+//    def found = values.find { it.startsWith("origin") && it.endsWith("(push)") }
+//    return found.replace("origin", "").replace("(push)", "").replace(".git", "").trim()
+//}
 
-    def found = values.find { it.startsWith("origin") && it.endsWith("(push)") }
-    return found.replace("origin", "").replace("(push)", "").replace(".git", "").trim()
-}
+//static def getGitUser() {
+//    def token = getGitOriginRemote().split("/")
+//    return token[3]
+//}
+//
+//static def getGitRepository() {
+//    def token = getGitOriginRemote().split("/")
+//    return token[4]
+//}
+//
+//static def getLatestGitHash() {
+//    def process = "git rev-parse --short HEAD".execute()
+//    return process.text.toString().trim()
+//}
 
-static def getGitUser() {
-    def token = getGitOriginRemote().split("/")
-    return token[3]
-}
+//task decryptPrivate {
+//    def out = services.get(StyledTextOutputFactory).create("")
+//
+//    def pass = "$System.env.CRYPT_PASS"
+//    if (pass == "null") {
+//        out.style(Style.Normal).text("In decrypt files the mandatory ")
+//                .style(Style.Failure).println('CRYPT_PASS not set')
+//                .style(Style.Normal).println("  If you want use Firebase features, please set it with ")
+//                .style(Style.SuccessHeader).println("  export CRYPT_PASS=<superSecret>")
+//        println ""
+//    } else {
+//        out.style(Style.Normal).text("decrypt files for ")
+//                .style(Style.SuccessHeader).text(getTag() + "." + getGitCommitCount() + "." + getLatestGitHash())
+//                .style(Style.Info).println(' DECRYPTED')
+//        println ""
+//
+//        def process = "pwd".execute()
+//        println "pwd=" + process.text.toString().trim()
+//        println "projectDir=$projectDir"
+//        println ""
+//
+//        def processDecrypt = "$projectDir/../signing/decrypt.sh".execute()
+//        processDecrypt.waitForProcessOutput(System.out, System.err)
+//    }
+//}
+//
+//def adbDirectory = '/storage/emulated/0/Download' // api 28
+////def adbDirectory = '/storage/self/primary/Download' // api 21
+//def reportsDirectory = "$projectDir/../screenshots/adb"
+//
+//def clearScreenshotsTask = task('clearScreenshots', type: Exec) {
+//    println "clearScreenshotsTask"
+//    executable "${android.getAdbExe().toString()}"
+//    args 'shell', 'rm', '-r', adbDirectory
+//}
+//
+//def createScreenshotDirectoryTask = task('createScreenshotDirectory', type: Exec, group: 'reporting') {
+//    println "createScreenshotDirectoryTask"
+//    executable "${android.getAdbExe().toString()}"
+//    args 'shell', 'mkdir', '-p', adbDirectory
+//}
+//
+//def fetchScreenshotsTask = task('fetchScreenshots', type: Exec, group: 'reporting') {
+//    println "fetchScreenshotsTask"
+//    executable "${android.getAdbExe().toString()}"
+//    args 'pull', adbDirectory + '/.', reportsDirectory
+//
+//    dependsOn {
+//        createScreenshotDirectoryTask
+//    }
+//
+//    doFirst {
+//        new File(reportsDirectory).mkdirs()
+//    }
+//}
+//
+//tasks.whenTaskAdded { task ->
+//    if (task.name == 'connectedDebugAndroidTest') {
+//        task.mustRunAfter {
+//            clearScreenshotsTask
+//            createScreenshotDirectoryTask
+//        }
+//        task.finalizedBy {
+//            fetchScreenshotsTask
+//        }
+//    }
+//}
 
-static def getGitRepository() {
-    def token = getGitOriginRemote().split("/")
-    return token[4]
-}
-
-static def getLatestGitHash() {
-    def process = "git rev-parse --short HEAD".execute()
-    return process.text.toString().trim()
-}
-
-task decryptPrivate {
-    def out = services.get(StyledTextOutputFactory).create("")
-
-    def pass = "$System.env.CRYPT_PASS"
-    if (pass == "null") {
-        out.style(Style.Normal).text("In decrypt files the mandatory ")
-                .style(Style.Failure).println('CRYPT_PASS not set')
-                .style(Style.Normal).println("  If you want use Firebase features, please set it with ")
-                .style(Style.SuccessHeader).println("  export CRYPT_PASS=<superSecret>")
-        println ""
-    } else {
-        out.style(Style.Normal).text("decrypt files for ")
-                .style(Style.SuccessHeader).text(getTag() + "." + getGitCommitCount() + "." + getLatestGitHash())
-                .style(Style.Info).println(' DECRYPTED')
-        println ""
-
-        def process = "pwd".execute()
-        println "pwd=" + process.text.toString().trim()
-        println "projectDir=$projectDir"
-        println ""
-
-        def processDecrypt = "$projectDir/../signing/decrypt.sh".execute()
-        processDecrypt.waitForProcessOutput(System.out, System.err)
-    }
-}
-
-def adbDirectory = '/storage/emulated/0/Download' // api 28
-//def adbDirectory = '/storage/self/primary/Download' // api 21
-def reportsDirectory = "$projectDir/../screenshots/adb"
-
-def clearScreenshotsTask = task('clearScreenshots', type: Exec) {
-    println "clearScreenshotsTask"
-    executable "${android.getAdbExe().toString()}"
-    args 'shell', 'rm', '-r', adbDirectory
-}
-
-def createScreenshotDirectoryTask = task('createScreenshotDirectory', type: Exec, group: 'reporting') {
-    println "createScreenshotDirectoryTask"
-    executable "${android.getAdbExe().toString()}"
-    args 'shell', 'mkdir', '-p', adbDirectory
-}
-
-def fetchScreenshotsTask = task('fetchScreenshots', type: Exec, group: 'reporting') {
-    println "fetchScreenshotsTask"
-    executable "${android.getAdbExe().toString()}"
-    args 'pull', adbDirectory + '/.', reportsDirectory
-
-    dependsOn {
-        createScreenshotDirectoryTask
-    }
-
-    doFirst {
-        new File(reportsDirectory).mkdirs()
-    }
-}
-
-tasks.whenTaskAdded { task ->
-    if (task.name == 'connectedDebugAndroidTest') {
-        task.mustRunAfter {
-            clearScreenshotsTask
-            createScreenshotDirectoryTask
-        }
-        task.finalizedBy {
-            fetchScreenshotsTask
-        }
-    }
-}
-
-clean.dependsOn decryptPrivate
+//clean.dependsOn decryptPrivate
 
 apply plugin: 'com.google.gms.google-services'

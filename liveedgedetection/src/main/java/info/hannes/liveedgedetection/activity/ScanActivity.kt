@@ -42,7 +42,6 @@ import info.hannes.liveedgedetection.view.*
  * This class initiates camera and detects edges on live view
  */
 class ScanActivity : AppCompatActivity(), IScanner, View.OnClickListener{
-    lateinit var croppedBitmap: Bitmap
     private var imageSurfaceView: ScanSurfaceView? = null
     private var isCameraPermissionGranted = true
     private var isExternalStorageStatsPermissionGranted = true
@@ -71,6 +70,7 @@ class ScanActivity : AppCompatActivity(), IScanner, View.OnClickListener{
             TransitionManager.beginDelayedTransition(container_scan)
             crop_layout.visibility = View.GONE
             imageSurfaceView?.setPreviewCallback()
+            capture.visibility = View.VISIBLE
         }
         checkCameraPermissions()
         if (intent.hasExtra(ScanConstants.IMAGE_PATH))
@@ -164,6 +164,7 @@ class ScanActivity : AppCompatActivity(), IScanner, View.OnClickListener{
         }
     }
 
+    //After the image is clicked, the image is cropped around the rectangle made
     override fun onPictureClicked(bitmap: Bitmap) {
         try {
             copyBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true)
@@ -215,6 +216,7 @@ class ScanActivity : AppCompatActivity(), IScanner, View.OnClickListener{
         }
     }
 
+    //This function adjusts the orientation of the cropped image and shows it in imageview
     @SuppressLint("SimpleDateFormat")
     override fun onClick(view: View) {
         val points = polygon_view.points
@@ -246,7 +248,7 @@ class ScanActivity : AppCompatActivity(), IScanner, View.OnClickListener{
             ScanConstants.IMAGE_PATH = filepath.toString()
             ScanConstants.croppedBitmap = croppedBitmap
         }
-        sharpen()
+//        sharpen()
         ScanConstants.IMAGE_NAME = imageFileName.toString()
         val intent = Intent(this, data::class.java)
         intent.putExtra("fname", imageFileName)
@@ -254,20 +256,20 @@ class ScanActivity : AppCompatActivity(), IScanner, View.OnClickListener{
         finish()
     }
 
-    private fun sharpen() {
-            try {
-                val bmpMonochrome = Bitmap.createBitmap(croppedBitmap.getWidth(), croppedBitmap.getHeight(), Bitmap.Config.ARGB_8888)
-                val source = Mat()
-                Utils.bitmapToMat(bmpMonochrome, source)
-                val destination = Mat(source.rows(), source.cols(), source.type())
-
-                // filtering
-                Imgproc.GaussianBlur(source, destination, Size(0.0, 0.0), 10.0)
-                Core.addWeighted(source, 1.5, destination, -0.5, 0.0, destination)
-                Utils.bitmapToMat(bmpMonochrome, destination)
-            } catch (e: java.lang.Exception) {
-            }
-    }
+//    private fun sharpen() {
+//            try {
+//                val bmpMonochrome = Bitmap.createBitmap(croppedBitmap.getWidth(), croppedBitmap.getHeight(), Bitmap.Config.ARGB_8888)
+//                val source = Mat()
+//                Utils.bitmapToMat(bmpMonochrome, source)
+//                val destination = Mat(source.rows(), source.cols(), source.type())
+//
+//                // filtering
+//                Imgproc.GaussianBlur(source, destination, Size(0.0, 0.0), 10.0)
+//                Core.addWeighted(source, 1.5, destination, -0.5, 0.0, destination)
+//                Utils.bitmapToMat(bmpMonochrome, destination)
+//            } catch (e: java.lang.Exception) {
+//            }
+//    }
 
     private fun saveToInternalStorage(bitmapImage: Bitmap): String? {
         val root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString()
@@ -297,8 +299,6 @@ class ScanActivity : AppCompatActivity(), IScanner, View.OnClickListener{
         private const val PERMISSIONS_REQUEST_CAMERA = 101
         private const val PERMISSIONS_REQUEST_EXTERNAL_STORAGE = 102
         private const val openCvLibrary = "opencv_java4"
-        val JSON = "application/json; charset=utf-8".toMediaTypeOrNull()
-
         val allDraggedPointsStack = Stack<PolygonPoints>()
 
         init {

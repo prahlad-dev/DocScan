@@ -15,19 +15,13 @@ class DetectApplication : Application() {
 
         Thread.setDefaultUncaughtExceptionHandler { t, e ->
             @Suppress("ControlFlowWithEmptyBody")
-            Timber.e(e.cause?.also { } ?: run { e })
+//            Timber.e(e.cause?.also { } ?: run { e })
             oldHandler?.uncaughtException(t, e)
         }
 
         externalCacheDir?.let {
-            Timber.plant(FileLoggingTree(it, this))
+//            Timber.plant(FileLoggingTree(it, this))
         }
 
-//        FirebaseCrashlytics.getInstance().setCustomKey("VERSION_NAME", BuildConfig.VERSION_NAME)
-//        FirebaseCrashlytics.getInstance().setCustomKey("OpenCV", org.opencv.BuildConfig.VERSION_NAME)
-
-//        if (!BuildConfig.DEBUG)
-//            Timber.plant(CrashlyticsTree(Settings.Secure.getString(applicationContext.contentResolver, Settings.Secure.ANDROID_ID)))
-//
     }
 }
