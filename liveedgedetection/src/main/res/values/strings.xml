@@ -8,4 +8,21 @@
     <string name="adjust_angle">Adjust angle less than 25 degrees</string>
     <string name="hold_still">Hold still</string>
     <string name="capturing">Capturing image</string>
+    <string name="qis">Quote in Snap</string>
+    <string name="fname">Filename:</string>
+    <string name="block">Block Confidence:</string>
+    <string name="symbol">Sym Confidence:</string>
+    <string name="reqid">Request Id:</string>
+    <string name="vertical">Vertical:</string>
+    <string name="vehicleid">Vehicle Id:</string>
+    <string name="make">Make:</string>
+    <string name="model">Model:</string>
+    <string name="variant">Variant:</string>
+    <string name="fuel">Fuel:</string>
+    <string name="cc">CC:</string>
+    <string name="previnsu">Previous Insurer:</string>
+    <string name="mfgyear">Mfg Year:</string>
+    <string name="regdate">Registration Date:</string>
+    <string name="expdate">Expiry Date:</string>
+
 </resources>

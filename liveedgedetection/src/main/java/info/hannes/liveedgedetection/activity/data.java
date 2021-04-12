@@ -1,14 +1,10 @@
 package info.hannes.liveedgedetection.activity;
 
 
-import android.app.ProgressDialog;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.StrictMode;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -17,7 +13,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
@@ -31,7 +26,6 @@ import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
-import okhttp3.Response;
 
 public class data extends AppCompatActivity {
 
@@ -40,15 +34,15 @@ public class data extends AppCompatActivity {
     Button done;
     String filename, block_conf, sym_conf, request_id, vertical_id,make_id, model_id, variant_id, fuel_id, prev_insurer,registration_date,expiry_date;
     String vehicle_id,cc_id,mfg_yr;
-    ProgressDialog progressDoalog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_data);
 
         fname = findViewById(R.id.fname);
-        blockconf= findViewById(R.id.blockconf);
-        symconf = findViewById(R.id.symcon);
+        blockconf= findViewById(R.id.block);
+        symconf = findViewById(R.id.symbol);
         reqid = findViewById(R.id.reqid);
         vertical = findViewById(R.id.vertical);
         vehicleid = findViewById(R.id.vehicleid);
@@ -61,8 +55,8 @@ public class data extends AppCompatActivity {
         mfgyear = findViewById(R.id.mfg);
         regdate = findViewById(R.id.regdate);
         expdate = findViewById(R.id.expdate);
-        done = findViewById(R.id.done);
-        wait = findViewById(R.id.wait);
+        done = findViewById(R.id.btnDone);
+        wait = findViewById(R.id.waitmsg);
 
         imagename = getIntent().getExtras().getString("fname");
 

@@ -3,6 +3,7 @@
     package="info.hannes.liveedgedetection">
 
     <uses-feature android:name="android.hardware.camera" />
+
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -10,11 +11,12 @@
     <uses-permission android:name="android.permission.FLASHLIGHT" />
 
     <application
-        android:supportsRtl="true"
-        android:requestLegacyExternalStorage="true"
         android:networkSecurityConfig="@xml/network_security_config"
+        android:requestLegacyExternalStorage="true"
+        android:supportsRtl="true"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activity.data"></activity>
+        <activity android:name=".activity.uploadData"></activity>
+        <activity android:name=".activity.data" />
         <activity
             android:name=".activity.ScanActivity"
             android:theme="@style/AppTheme" />

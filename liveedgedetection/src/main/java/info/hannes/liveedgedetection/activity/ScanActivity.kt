@@ -3,6 +3,7 @@ package info.hannes.liveedgedetection.activity
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
@@ -230,17 +231,17 @@ class ScanActivity : AppCompatActivity(), IScanner, View.OnClickListener{
         } else {
             copyBitmap
         }
-        croppedBitmap?.let { bitmap ->
-            val imageName = ScanConstants.IMAGE_NAME + SimpleDateFormat("-yyyy-MM-dd_HHmmss").format(Date()) + ".png"
-            var path: String? = null
-            intent.getStringExtra(ScanConstants.IMAGE_PATH)?.let {
-                path = FileUtils.saveToExternalMemory(bitmap, it, imageName, 100).first
-            } ?: run {
-                path = FileUtils.saveToInternalMemory(bitmap, ScanConstants.INTERNAL_IMAGE_DIR, imageName, this@ScanActivity, 100).first
-            }
-            setResult(Activity.RESULT_OK, Intent().putExtra(ScanConstants.SCANNED_RESULT, path + File.separator + imageName))
-
-        }
+//        croppedBitmap?.let { bitmap ->
+//            val imageName = ScanConstants.IMAGE_NAME + SimpleDateFormat("-yyyy-MM-dd_HHmmss").format(Date()) + ".png"
+//            var path: String? = null
+//            intent.getStringExtra(ScanConstants.IMAGE_PATH)?.let {
+//                path = FileUtils.saveToExternalMemory(bitmap, it, imageName, 100).first
+//            } ?: run {
+//                path = FileUtils.saveToInternalMemory(bitmap, ScanConstants.INTERNAL_IMAGE_DIR, imageName, this@ScanActivity, 100).first
+//            }
+//            setResult(Activity.RESULT_OK, Intent().putExtra(ScanConstants.SCANNED_RESULT, path + File.separator + imageName))
+//
+//        }
 
         System.gc()
         if (croppedBitmap != null) {
@@ -250,8 +251,9 @@ class ScanActivity : AppCompatActivity(), IScanner, View.OnClickListener{
         }
 //        sharpen()
         ScanConstants.IMAGE_NAME = imageFileName.toString()
-        val intent = Intent(this, data::class.java)
+        val intent = Intent(this, uploadData::class.java)
         intent.putExtra("fname", imageFileName)
+        intent.putExtra("path", ScanConstants.IMAGE_PATH)
         startActivityForResult(intent, 101)
         finish()
     }

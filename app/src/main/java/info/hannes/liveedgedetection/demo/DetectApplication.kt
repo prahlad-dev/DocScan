@@ -15,13 +15,7 @@ class DetectApplication : Application() {
 
         Thread.setDefaultUncaughtExceptionHandler { t, e ->
             @Suppress("ControlFlowWithEmptyBody")
-//            Timber.e(e.cause?.also { } ?: run { e })
             oldHandler?.uncaughtException(t, e)
         }
-
-        externalCacheDir?.let {
-//            Timber.plant(FileLoggingTree(it, this))
-        }
-
     }
 }
