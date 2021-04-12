@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 class pojo {
     @SerializedName("response")
-    private val Response: String? = null
+    private var Response: String? = null
 
     @SerializedName("filename")
     private val fname: String? = null
@@ -107,7 +107,12 @@ class pojo {
         return fuel
     }
 
+    fun getvariant(): String? {
+        return variant
+    }
+
     fun getmodel(): String? {
         return model
     }
+
 }

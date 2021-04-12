@@ -26,13 +26,11 @@ import java.io.IOException
 
 class uploadData : AppCompatActivity() {
     var imagename: String? = null
-    var imagepath: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_data)
-        imagename = intent.extras!!.getString("fname")
-        imagepath = intent.extras!!.getString("path")
+        imagename = intent.extras!!.getString("filename")
         val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
         StrictMode.setThreadPolicy(policy)
         upload()
@@ -73,7 +71,21 @@ class uploadData : AppCompatActivity() {
                 try {
                     waitmsg.visibility = View.GONE
                     btnDone.visibility = View.VISIBLE
-                    fname.setText(response.toString())
+                    fname.setText(response.body()?.getfname())
+                    block.setText(response.body()?.getblock())
+                    symbol.setText(response.body()?.getsymbol())
+                    reqid.setText(response.body()?.getreqid())
+                    vertical.setText(response.body()?.getvertical())
+                    vehicleid.setText(response.body()?.getvehicleid())
+                    make.setText(response.body()?.getmake())
+                    model.setText(response.body()?.getmodel())
+                    variant.setText(response.body()?.getvariant())
+                    fuel.setText(response.body()?.getfuel())
+                    cc.setText(response.body()?.getcc())
+                    expdate.setText(response.body()?.getexpdate())
+                    previnsu.setText(response.body()?.getprevinsu())
+                    regdate.setText(response.body()?.getregdate())
+                    mfg.setText(response.body()?.getmanuf())
                 } catch (e: IOException) {
                     e.printStackTrace()
                 }

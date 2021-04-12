@@ -231,17 +231,6 @@ class ScanActivity : AppCompatActivity(), IScanner, View.OnClickListener{
         } else {
             copyBitmap
         }
-//        croppedBitmap?.let { bitmap ->
-//            val imageName = ScanConstants.IMAGE_NAME + SimpleDateFormat("-yyyy-MM-dd_HHmmss").format(Date()) + ".png"
-//            var path: String? = null
-//            intent.getStringExtra(ScanConstants.IMAGE_PATH)?.let {
-//                path = FileUtils.saveToExternalMemory(bitmap, it, imageName, 100).first
-//            } ?: run {
-//                path = FileUtils.saveToInternalMemory(bitmap, ScanConstants.INTERNAL_IMAGE_DIR, imageName, this@ScanActivity, 100).first
-//            }
-//            setResult(Activity.RESULT_OK, Intent().putExtra(ScanConstants.SCANNED_RESULT, path + File.separator + imageName))
-//
-//        }
 
         System.gc()
         if (croppedBitmap != null) {
@@ -249,29 +238,12 @@ class ScanActivity : AppCompatActivity(), IScanner, View.OnClickListener{
             ScanConstants.IMAGE_PATH = filepath.toString()
             ScanConstants.croppedBitmap = croppedBitmap
         }
-//        sharpen()
         ScanConstants.IMAGE_NAME = imageFileName.toString()
         val intent = Intent(this, uploadData::class.java)
-        intent.putExtra("fname", imageFileName)
-        intent.putExtra("path", ScanConstants.IMAGE_PATH)
+        intent.putExtra("filename", imageFileName)
         startActivityForResult(intent, 101)
         finish()
     }
-
-//    private fun sharpen() {
-//            try {
-//                val bmpMonochrome = Bitmap.createBitmap(croppedBitmap.getWidth(), croppedBitmap.getHeight(), Bitmap.Config.ARGB_8888)
-//                val source = Mat()
-//                Utils.bitmapToMat(bmpMonochrome, source)
-//                val destination = Mat(source.rows(), source.cols(), source.type())
-//
-//                // filtering
-//                Imgproc.GaussianBlur(source, destination, Size(0.0, 0.0), 10.0)
-//                Core.addWeighted(source, 1.5, destination, -0.5, 0.0, destination)
-//                Utils.bitmapToMat(bmpMonochrome, destination)
-//            } catch (e: java.lang.Exception) {
-//            }
-//    }
 
     private fun saveToInternalStorage(bitmapImage: Bitmap): String? {
         val root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString()
