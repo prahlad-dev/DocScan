@@ -16,7 +16,6 @@
         android:supportsRtl="true"
         android:usesCleartextTraffic="true">
         <activity android:name=".activity.uploadData"></activity>
-        <activity android:name=".activity.data" />
         <activity
             android:name=".activity.ScanActivity"
             android:theme="@style/AppTheme" />

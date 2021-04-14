@@ -103,7 +103,9 @@ class ScanSurfaceView(context: Context, iScanner: IScanner, val TIME_HOLD_STILL:
             parameters.focusMode = Parameters.FOCUS_MODE_AUTO
         }
         val size = ScanUtils.determinePictureSize(camera, parameters.previewSize)
-        parameters.setPictureSize(size.width, size.height)
+        if (size != null) {
+            parameters.setPictureSize(size.width, size.height)
+        }
         parameters.pictureFormat = ImageFormat.JPEG
         parameters.jpegQuality = 100
         camera!!.parameters = parameters

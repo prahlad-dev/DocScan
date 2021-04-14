@@ -2,8 +2,6 @@ package info.hannes.liveedgedetection.activity
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
@@ -22,11 +20,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import info.hannes.liveedgedetection.*
-import info.hannes.liveedgedetection.FileUtils
-import info.hannes.liveedgedetection.view.ScanSurfaceView
+import info.hannes.liveedgedetection.view.*
 import kotlinx.android.synthetic.main.activity_scan.*
 import okhttp3.*
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import org.opencv.android.Utils
 import org.opencv.core.*
 import org.opencv.imgproc.Imgproc
@@ -36,7 +32,6 @@ import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.abs
-import info.hannes.liveedgedetection.view.*
 
 
 /**
@@ -51,6 +46,8 @@ class ScanActivity : AppCompatActivity(), IScanner, View.OnClickListener{
     private var imageFileName: String? = null
     private var filepath: String? = null
     lateinit var capture: Button
+    var CAMERA_RQ = 1111
+    var STORAGE_RQ = 2222
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,7 +73,53 @@ class ScanActivity : AppCompatActivity(), IScanner, View.OnClickListener{
         checkCameraPermissions()
         if (intent.hasExtra(ScanConstants.IMAGE_PATH))
             checkExternalStoragePermissions()
+
+//        checkForPermissions(android.Manifest.permission.CAMERA, "Camera", CAMERA_RQ)
+//        checkForPermissions(android.Manifest.permission.WRITE_EXTERNAL_STORAGE, "Storage", STORAGE_RQ)
     }
+
+//    private fun checkForPermissions(permission: String, name:String, requestCode: Int){
+//        if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.M){
+//            when{
+//                ContextCompat.checkSelfPermission(applicationContext,permission) == PackageManager.PERMISSION_GRANTED -> {
+//                    Toast.makeText(applicationContext, "$name Permission Granted.", Toast.LENGTH_SHORT).show()
+//                }
+//                shouldShowRequestPermissionRationale(permission)-> showDialog(permission, name, requestCode)
+//
+//                else-> ActivityCompat.requestPermissions(this, arrayOf(permission),requestCode)
+//            }
+//        }
+//    }
+//
+//    private fun showDialog(permission: String, name: String, requestCode: Int){
+//        val builder = AlertDialog.Builder(this)
+//
+//        builder.apply {
+//            setMessage("Permission to access $name is required for this app.")
+//            setTitle("Permission Required.")
+//            setPositiveButton("Ok"){dialog, which ->
+//                ActivityCompat.requestPermissions(this@ScanActivity, arrayOf(permission), requestCode )
+//            }
+//        }
+//        val dialog = builder.create()
+//        dialog.show()
+//    }
+//
+//    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+//        fun innercheck(name: String){
+//            if(grantResults.isEmpty() || grantResults[0]!= PackageManager.PERMISSION_GRANTED){
+//                Toast.makeText(applicationContext, "$name Permission Refused.", Toast.LENGTH_SHORT).show()
+//            }
+//            else{
+//                Toast.makeText(applicationContext, "$name Permission Granted.", Toast.LENGTH_SHORT).show()
+//            }
+//        }
+//        when(requestCode){
+//            CAMERA_RQ -> innercheck("Camera")
+//            STORAGE_RQ -> innercheck("Storage")
+//        }
+//
+//    }
 
     private fun checkCameraPermissions() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
@@ -116,6 +159,7 @@ class ScanActivity : AppCompatActivity(), IScanner, View.OnClickListener{
             PERMISSIONS_REQUEST_CAMERA -> onRequestCamera(grantResults)
             PERMISSIONS_REQUEST_EXTERNAL_STORAGE -> onRequestExternalStorage(grantResults)
             else -> {
+                Toast.makeText(applicationContext, "Permission Refused.", Toast.LENGTH_SHORT).show()
             }
         }
     }
