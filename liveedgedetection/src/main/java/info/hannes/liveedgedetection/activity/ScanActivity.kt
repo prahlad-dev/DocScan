@@ -19,6 +19,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.araujo.jordan.excuseme.ExcuseMe
 import info.hannes.liveedgedetection.*
 import info.hannes.liveedgedetection.view.*
 import kotlinx.android.synthetic.main.activity_scan.*
@@ -70,117 +71,90 @@ class ScanActivity : AppCompatActivity(), IScanner, View.OnClickListener{
             imageSurfaceView?.setPreviewCallback()
             capture.visibility = View.VISIBLE
         }
-        checkCameraPermissions()
-        if (intent.hasExtra(ScanConstants.IMAGE_PATH))
-            checkExternalStoragePermissions()
 
-//        checkForPermissions(android.Manifest.permission.CAMERA, "Camera", CAMERA_RQ)
-//        checkForPermissions(android.Manifest.permission.WRITE_EXTERNAL_STORAGE, "Storage", STORAGE_RQ)
-    }
-
-//    private fun checkForPermissions(permission: String, name:String, requestCode: Int){
-//        if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.M){
-//            when{
-//                ContextCompat.checkSelfPermission(applicationContext,permission) == PackageManager.PERMISSION_GRANTED -> {
-//                    Toast.makeText(applicationContext, "$name Permission Granted.", Toast.LENGTH_SHORT).show()
-//                }
-//                shouldShowRequestPermissionRationale(permission)-> showDialog(permission, name, requestCode)
-//
-//                else-> ActivityCompat.requestPermissions(this, arrayOf(permission),requestCode)
-//            }
-//        }
-//    }
-//
-//    private fun showDialog(permission: String, name: String, requestCode: Int){
-//        val builder = AlertDialog.Builder(this)
-//
-//        builder.apply {
-//            setMessage("Permission to access $name is required for this app.")
-//            setTitle("Permission Required.")
-//            setPositiveButton("Ok"){dialog, which ->
-//                ActivityCompat.requestPermissions(this@ScanActivity, arrayOf(permission), requestCode )
-//            }
-//        }
-//        val dialog = builder.create()
-//        dialog.show()
-//    }
-//
-//    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-//        fun innercheck(name: String){
-//            if(grantResults.isEmpty() || grantResults[0]!= PackageManager.PERMISSION_GRANTED){
-//                Toast.makeText(applicationContext, "$name Permission Refused.", Toast.LENGTH_SHORT).show()
-//            }
-//            else{
-//                Toast.makeText(applicationContext, "$name Permission Granted.", Toast.LENGTH_SHORT).show()
-//            }
-//        }
-//        when(requestCode){
-//            CAMERA_RQ -> innercheck("Camera")
-//            STORAGE_RQ -> innercheck("Storage")
-//        }
-//
-//    }
-
-    private fun checkCameraPermissions() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            isCameraPermissionGranted = false
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
-                Toast.makeText(this, "Enable camera permission from settings", Toast.LENGTH_SHORT).show()
-            } else {
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), PERMISSIONS_REQUEST_CAMERA)
-            }
-        } else {
-            if (isCameraPermissionGranted) {
+        ExcuseMe.couldYouGive(this).permissionFor(
+                android.Manifest.permission.CAMERA, android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+        ) {
+            if(it.granted.contains(android.Manifest.permission.CAMERA)) {
                 imageSurfaceView = ScanSurfaceView(this@ScanActivity, this, timeHoldStill)
                 camera_preview.addView(imageSurfaceView)
-            } else {
-                isCameraPermissionGranted = true
             }
         }
+
+//        ExcuseMe.couldYouGive(this).please(
+//                explainAgainTitle = "Permission is necessary",
+//                explainAgainExplanation = "The app need this permission to send the automatic SMS",
+//                showSettingsTitle = "Set permission in Settings",
+//                showSettingsExplanation = "The app will open the settings to change the permission from there"
+//        ).permissionFor(android.Manifest.permission.CAMERA)
+
+    //        checkCameraPermissions()
+//        if (intent.hasExtra(ScanConstants.IMAGE_PATH))
+//            checkExternalStoragePermissions()
+
+
     }
 
-    private fun checkExternalStoragePermissions() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            isExternalStorageStatsPermissionGranted = false
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                Toast.makeText(this, "Enable external storage permission", Toast.LENGTH_SHORT).show()
-            } else {
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), PERMISSIONS_REQUEST_EXTERNAL_STORAGE)
-            }
-        } else {
-            if (!isExternalStorageStatsPermissionGranted) {
-                isExternalStorageStatsPermissionGranted = true
-            }
-        }
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        when (requestCode) {
-            PERMISSIONS_REQUEST_CAMERA -> onRequestCamera(grantResults)
-            PERMISSIONS_REQUEST_EXTERNAL_STORAGE -> onRequestExternalStorage(grantResults)
-            else -> {
-                Toast.makeText(applicationContext, "Permission Refused.", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
-    private fun onRequestCamera(grantResults: IntArray) {
-        if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            Handler(Looper.getMainLooper()).post {
-                imageSurfaceView = ScanSurfaceView(this@ScanActivity, this@ScanActivity, timeHoldStill)
-                camera_preview.addView(imageSurfaceView)
-            }
-        } else {
-            Toast.makeText(this, getString(R.string.permission_denied_camera_toast), Toast.LENGTH_SHORT).show()
-            finish()
-        }
-    }
-
-    private fun onRequestExternalStorage(grantResults: IntArray) {
-        if (grantResults.isEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(this, getString(R.string.permission_denied_external_storage_toast), Toast.LENGTH_SHORT).show()
-        }
-    }
+//    private fun checkCameraPermissions() {
+//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+//            isCameraPermissionGranted = false
+//            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
+//                Toast.makeText(this, "Enable camera permission from settings", Toast.LENGTH_SHORT).show()
+//            } else {
+//                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), PERMISSIONS_REQUEST_CAMERA)
+//            }
+//        } else {
+//            if (isCameraPermissionGranted) {
+//                imageSurfaceView = ScanSurfaceView(this@ScanActivity, this, timeHoldStill)
+//                camera_preview.addView(imageSurfaceView)
+//            } else {
+//                isCameraPermissionGranted = true
+//            }
+//        }
+//    }
+//
+//    private fun checkExternalStoragePermissions() {
+//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+//            isExternalStorageStatsPermissionGranted = false
+//            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+//                Toast.makeText(this, "Enable external storage permission", Toast.LENGTH_SHORT).show()
+//            } else {
+//                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), PERMISSIONS_REQUEST_EXTERNAL_STORAGE)
+//            }
+//        } else {
+//            if (!isExternalStorageStatsPermissionGranted) {
+//                isExternalStorageStatsPermissionGranted = true
+//            }
+//        }
+//    }
+//
+//    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+//        when (requestCode) {
+//            PERMISSIONS_REQUEST_CAMERA -> onRequestCamera(grantResults)
+//            PERMISSIONS_REQUEST_EXTERNAL_STORAGE -> onRequestExternalStorage(grantResults)
+//            else -> {
+//                Toast.makeText(applicationContext, "Permission Refused.", Toast.LENGTH_SHORT).show()
+//            }
+//        }
+//    }
+//
+//    private fun onRequestCamera(grantResults: IntArray) {
+//        if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//            Handler(Looper.getMainLooper()).post {
+//                imageSurfaceView = ScanSurfaceView(this@ScanActivity, this@ScanActivity, timeHoldStill)
+//                camera_preview.addView(imageSurfaceView)
+//            }
+//        } else {
+//            Toast.makeText(this, getString(R.string.permission_denied_camera_toast), Toast.LENGTH_SHORT).show()
+//            finish()
+//        }
+//    }
+//
+//    private fun onRequestExternalStorage(grantResults: IntArray) {
+//        if (grantResults.isEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//            Toast.makeText(this, getString(R.string.permission_denied_external_storage_toast), Toast.LENGTH_SHORT).show()
+//        }
+//    }
 
     override fun displayHint(scanHint: ScanHint) {
         capture_hint_layout.visibility = View.VISIBLE

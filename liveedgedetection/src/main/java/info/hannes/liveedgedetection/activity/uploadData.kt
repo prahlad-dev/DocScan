@@ -89,6 +89,9 @@ class uploadData : AppCompatActivity() {
                 } catch (e: IOException) {
                     e.printStackTrace()
                 }
+                if (reqid.text == "" || previnsu.text == "" || vertical.text == ""){
+                    heading.setText("Capture Image Again.")
+                }
             }
 
             override fun onFailure(call: Call<pojo?>, t: Throwable) {
