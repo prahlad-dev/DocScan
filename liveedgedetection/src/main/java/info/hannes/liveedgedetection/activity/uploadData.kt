@@ -89,13 +89,15 @@ class uploadData : AppCompatActivity() {
                     e.printStackTrace()
                 }
                 if (reqid.text == "" || previnsu.text == "" || vertical.text == ""){
-                    waitmsg.setText("Capture Image Again.")
+                    waitmsg.setText("Data Could not be fetched properly.")
+                    heading.setText("Capture Image Again")
                 }
             }
 
             override fun onFailure(call: Call<pojo?>, t: Throwable) {
                 btnDone.visibility = View.VISIBLE
                 waitmsg.setText(t.message)
+                heading.setText("Capture Image Again")
             }
         })
     }
