@@ -69,7 +69,6 @@ class uploadData : AppCompatActivity() {
         call!!.enqueue(object : Callback<pojo?> {
             override fun onResponse(call: Call<pojo?>, response: Response<pojo?>) {
                 try {
-                    waitmsg.visibility = View.GONE
                     btnDone.visibility = View.VISIBLE
                     fname.setText(response.body()?.getfname())
                     block.setText(response.body()?.getblock())
@@ -90,14 +89,13 @@ class uploadData : AppCompatActivity() {
                     e.printStackTrace()
                 }
                 if (reqid.text == "" || previnsu.text == "" || vertical.text == ""){
-                    heading.setText("Capture Image Again.")
+                    waitmsg.setText("Capture Image Again.")
                 }
             }
 
             override fun onFailure(call: Call<pojo?>, t: Throwable) {
-                waitmsg.visibility = View.GONE
                 btnDone.visibility = View.VISIBLE
-                Log.d("mainAPI", t.message!!)
+                waitmsg.setText(t.message)
             }
         })
     }

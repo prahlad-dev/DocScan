@@ -47,8 +47,6 @@ class ScanActivity : AppCompatActivity(), IScanner, View.OnClickListener{
     private var imageFileName: String? = null
     private var filepath: String? = null
     lateinit var capture: Button
-    var CAMERA_RQ = 1111
-    var STORAGE_RQ = 2222
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
